@@ -109,8 +109,8 @@ public class CursomcApplication implements CommandLineRunner {
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-		Pedido ped1 = new Pedido(null, sdf.parse("30/10/2020 10:24"), cli1, e1);
-		Pedido ped2 = new Pedido(null, sdf.parse("30/10/2020 10:24"), cli1, e2);
+		Pedido ped1 = new Pedido(null, sdf.parse("28/01/2022 10:24"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("28/01/2022 10:24"), cli1, e2);
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 		
 		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
