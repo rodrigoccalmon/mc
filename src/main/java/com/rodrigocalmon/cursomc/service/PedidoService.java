@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rodrigocalmon.cursomc.domain.Pedido;
-import com.rodrigocalmon.cursomc.repository.CategoriaRepository;
 import com.rodrigocalmon.cursomc.repository.PedidoRepository;
 import com.rodrigocalmon.cursomc.service.exception.ObjectNotFoundException;
 

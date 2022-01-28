@@ -30,16 +30,14 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
-	
-	@JsonManagedReference
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
-	
-	@JsonManagedReference
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
@@ -51,7 +49,6 @@ public class Pedido implements Serializable {
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
 
-
 	public Pedido(Integer id, Date instante, Pagamento pagamento, Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
 		this.id = id;
@@ -62,10 +59,6 @@ public class Pedido implements Serializable {
 	}
 
 	public Pedido() {
-	}
-
-	public Pedido(Object object, Date parse, Cliente cli1, Endereco e1) {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {
