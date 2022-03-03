@@ -20,6 +20,7 @@ import com.rodrigocalmon.cursomc.domain.PagamentoComCartao;
 import com.rodrigocalmon.cursomc.domain.Pedido;
 import com.rodrigocalmon.cursomc.domain.Produto;
 import com.rodrigocalmon.cursomc.domain.enums.EstadoPagamento;
+import com.rodrigocalmon.cursomc.domain.enums.Perfil;
 import com.rodrigocalmon.cursomc.domain.enums.TipoCliente;
 import com.rodrigocalmon.cursomc.repository.CategoriaRepository;
 import com.rodrigocalmon.cursomc.repository.CidadeRepository;
@@ -59,12 +60,12 @@ public class DBService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
 	public void istantiateTestDatabase() throws ParseException {
-		
+
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
 		Categoria cat3 = new Categoria(null, "Eletrônicos");
@@ -73,7 +74,6 @@ public class DBService {
 		Categoria cat6 = new Categoria(null, "Perfumaria");
 		Categoria cat7 = new Categoria(null, "Games");
 		Categoria cat8 = new Categoria(null, "Teste");
-
 
 		Produto p1 = new Produto(null, "Computador", 2000.00);
 		Produto p2 = new Produto(null, "Impressora", 800.00);
@@ -123,16 +123,25 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-		Cliente cli1 = new Cliente(null, "Rodrigo Calmon", "rodrigo.ccalmon@gmail.com", "1452222", TipoCliente.PESSOAFISICA, pe.encode("admin"));
+		Cliente cli1 = new Cliente(null, "Rodrigo Calmon", "rodrigo.ccalmon@gmail.com", "1452222",
+				TipoCliente.PESSOAFISICA, pe.encode("admin"));
 		cli1.getTelefones().addAll(Arrays.asList("21993197403", "2199451888"));
+
+		Cliente cli2 = new Cliente(null, "Gisele Calmon", "gisele.ccalmon@gmail.com", "1452222",
+				TipoCliente.PESSOAFISICA, pe.encode("admin"));
+		cli2.getTelefones().addAll(Arrays.asList("21993197403", "2199451888"));
+		cli2.addPerfil(Perfil.ADMIN);
 
 		Endereco e1 = new Endereco(null, "Rua Paru", "238", "apto 205", "Agriões", "25963002", cli1, c2);
 		Endereco e2 = new Endereco(null, "AV. Ns de Copa", "1424", "apto 901", "Copa", "25963002", cli1, c2);
+		Endereco e3 = new Endereco(null, "Rua Afonso Cavalcanti", "1424", "apto 901", "Cidade Nova", "25963002", cli2,
+				c2);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 		Pedido ped1 = new Pedido(null, sdf.parse("28/01/2022 10:24"), cli1, e1);
@@ -161,6 +170,5 @@ public class DBService {
 
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
-
 
 }
