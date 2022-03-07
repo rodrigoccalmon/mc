@@ -3,6 +3,7 @@ package com.rodrigocalmon.cursomc.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,17 +11,18 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.rodrigocalmon.cursomc.domain.Categoria;
 import com.rodrigocalmon.cursomc.domain.Cidade;
 import com.rodrigocalmon.cursomc.domain.Cliente;
 import com.rodrigocalmon.cursomc.domain.Endereco;
+import com.rodrigocalmon.cursomc.domain.enums.Perfil;
 import com.rodrigocalmon.cursomc.domain.enums.TipoCliente;
 import com.rodrigocalmon.cursomc.dto.ClienteDTO;
 import com.rodrigocalmon.cursomc.dto.ClienteNewDTO;
 import com.rodrigocalmon.cursomc.repository.CidadeRepository;
 import com.rodrigocalmon.cursomc.repository.ClienteRepository;
 import com.rodrigocalmon.cursomc.repository.EnderecoRepository;
-import com.rodrigocalmon.cursomc.service.exception.ObjectNotFoundException;
+import com.rodrigocalmon.cursomc.security.UserSS;
+import com.rodrigocalmon.cursomc.service.exception.AuthorizationException;
 
 @Service
 public class ClienteService {
@@ -35,9 +37,15 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName(), null));
 	}
 
 	public Cliente insert(Cliente obj) {
